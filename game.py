@@ -1,5 +1,4 @@
 import numpy as np
-import os
 from matplotlib import pyplot as plt
 def init():
     n, m = map(int, input("dimensions: ").split())
