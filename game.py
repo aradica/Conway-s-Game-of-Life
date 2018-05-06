@@ -54,6 +54,7 @@ def main():
     board, t = init()
     plt.imshow(board)
     plt.savefig("img0.png")
+    plt.cla()
     print("Please wait...")
     for img in range(1, t+1):
         board = updateBoard(board)
@@ -61,5 +62,4 @@ def main():
         plt.savefig("img{}.png".format(img))
         plt.cla()
     print("Done!")
-    
 main()      
