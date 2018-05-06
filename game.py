@@ -1,11 +1,13 @@
 import numpy as np
 from matplotlib import pyplot as plt
+
 def init():
-    n, m = map(int, input("dimensions: ").split())
+    n, m = map(int, input("Board dimensions: ").split())
     r = input("Randomize? [yes/no]: ")
-    if r != "yes":
+    if r == "yes":
         a = np.random.randint(2, size=(n, m))
     else:
+        a = np.zeros((n, m))
         N = int(input("Number of cells to input:  "))
         print("0<=n<{}, 0<=m<{}".format(n, m))
         for k in range(N):
@@ -52,8 +54,11 @@ def main():
     board, t = init()
     plt.imshow(board)
     plt.savefig("img0.png")
+    print("Please wait...")
     for img in range(1, t+1):
         board = updateBoard(board)
         plt.imshow(board)
         plt.savefig("img{}.png".format(img))
+    print("Done!")
+    
 main()      
