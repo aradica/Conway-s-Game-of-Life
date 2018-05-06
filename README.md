@@ -1,2 +1,2 @@
 # Conway-s-Game-of-Life
-Python
+Written in Python 3.6.4
