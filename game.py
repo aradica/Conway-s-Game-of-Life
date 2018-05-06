@@ -16,7 +16,7 @@ def init():
     t = int(input("Time: "))
     return a, t
 
-def countLiveCells(a, n, m):
+def countLiveNeighbours(a, n, m):
     N = len(a)
     M = len(a[0])
     live_cells = 0
@@ -37,7 +37,7 @@ def updateBoard(a):
     for k in range(N):
         for j in range(M):
             cell = a[k][j]
-            live_cells = countLiveCells(a, k, j)
+            live_cells = countLiveNeighbours(a, k, j)
             if cell == 0:
                 if live_cells == 3:
                     b[k][j] = 1
@@ -59,6 +59,7 @@ def main():
         board = updateBoard(board)
         plt.imshow(board)
         plt.savefig("img{}.png".format(img))
+        plt.cla()
     print("Done!")
     
 main()      
