@@ -1,5 +1,6 @@
 # Conway-s-Game-of-Life
 Written in Python 3.6.4
+Important: make a folder 'Imgs' in the same directory you run the code from!
 
 Rules:
 1. Any live cell with fewer than two live neighbors dies, as if caused by under population.
