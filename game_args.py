@@ -42,7 +42,7 @@ def updateBoard(a, N, M):
                 else:
                     b[k,j] = 0 #r >3
     return b
-#working on multithreading...
+
 def updateBoardFast(a, N, M):
     b = np.zeros((N, M))
     total = 0
@@ -77,6 +77,9 @@ def main():
     N, M, pcnt, t, s, l = args["rows"], args["collumns"], args["percentage"] / 100, args["time"], args["save"], args["live"]
     board = np.random.choice([0, 1], size=(N,M), p=[1-pcnt, pcnt])
     
+    prev2 = np.copy(board)
+
+    
     pgraph = []
     P = countLiveCellsFast(board)
     print("Working on it...")
@@ -84,6 +87,8 @@ def main():
     for img in range(t):
         IMG.set_data(board)
 
+        if img%2 == 0:
+            prev2 = np.copy(board)
         
         pgraph.append(P)
         plt.title("Time: {}, Cells: {}".format(img,P))
@@ -92,6 +97,12 @@ def main():
         board, P = updateBoardFast(board, N, M)
         if l == 1:
             plt.pause(0.005)
+
+        if (prev2 == board).all() == True:
+            print("Infinite loop encounter")
+            t = img + 1
+            break
+    
     if l == 1:
         plt.show()
     plt.cla()
