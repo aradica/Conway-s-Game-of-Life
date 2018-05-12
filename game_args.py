@@ -22,8 +22,8 @@ def countLiveCells(a):
                 population += 1
     return population
 
-def countLiveCellsFast(a, N, M):
-    return N*M - np.sum(a, dtype=np.int32)
+def countLiveCellsFast(a):
+    return np.sum(a, dtype=np.int32)
 
 def updateBoard(a, N, M):
     b = np.zeros((N, M))
@@ -42,54 +42,57 @@ def updateBoard(a, N, M):
                 else:
                     b[k,j] = 0 #r >3
     return b
-
+#working on multithreading...
 def updateBoardFast(a, N, M):
     b = np.zeros((N, M))
+    total = 0
     for k, row in enumerate(a):
         for j, cell in enumerate(row):
             live_cells = countLiveNeighbours(a, k, j, N, M)
             if cell == 0:
                 if live_cells == 3:
                     b[k, j] = 1
+                    total += 1
             else:
                 if live_cells < 2:
                     b[k, j] = 0
                 elif live_cells == 2 or live_cells == 3:
                     b[k, j] = 1
+                    total += 1
                 else:
                     b[k, j] = 0
-    return b
+    return b, total
                              
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-n", "--rows", required=True, help="rows")
-    ap.add_argument("-m", "--collumns", required=True, help="collumns")
-    ap.add_argument("-p", "--percentage", required=True, help="percentage of live cells")
-    ap.add_argument("-t", "--time", required=True, help="time")
-    ap.add_argument("-s", "--save", required=True, help="save images")
-    ap.add_argument("-l", "--live", required=True, help="show live updates")
+    ap.add_argument("-n", "--rows", type=int, required=True, help="rows")
+    ap.add_argument("-m", "--collumns", type=int, required=True, help="collumns")
+    ap.add_argument("-p", "--percentage", type=int, required=True, help="percentage of live cells, 0-100")
+    ap.add_argument("-t", "--time", type=int, required=True, help="time")
+    ap.add_argument("-s", "--save", type=int, required=True, help="save images 1/0")
+    ap.add_argument("-l", "--live", type=int, required=True, help="show live updates 1/0")
     args = vars(ap.parse_args())
 
-    N, M, pcnt, t, s, l = int(args["rows"]), int(args["collumns"]), int(args["percentage"]) / 100, int(args["time"]), args["save"], args["live"]
+    N, M, pcnt, t, s, l = args["rows"], args["collumns"], args["percentage"] / 100, args["time"], args["save"], args["live"]
     board = np.random.choice([0, 1], size=(N,M), p=[1-pcnt, pcnt])
     
     pgraph = []
-    
+    P = countLiveCellsFast(board)
     print("Working on it...")
     IMG = plt.imshow(board,cmap='gray')
     for img in range(t):
         IMG.set_data(board)
 
-        P = countLiveCellsFast(board, N, M)
+        
         pgraph.append(P)
         plt.title("Time: {}, Cells: {}".format(img,P))
-        if s == "1":
+        if s == 1:
             plt.savefig("Imgs/img{}.png".format(img),bbox_inches='tight')
-        board = updateBoardFast(board, N, M)
-        if l == "1":
+        board, P = updateBoardFast(board, N, M)
+        if l == 1:
             plt.pause(0.005)
-    if l == "1":
+    if l == 1:
         plt.show()
     plt.cla()
     print("Done!")
@@ -98,7 +101,9 @@ def main():
     plt.xlabel('Time')
     plt.ylabel('Population')
     plt.title
-    plt.savefig("Imgs/graph.png")
-    plt.show()
+    if s == 1:
+        plt.savefig("Imgs/graph.png")
+    if l == 1:
+        plt.show()
 
 main()
