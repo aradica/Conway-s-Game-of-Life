@@ -138,8 +138,9 @@ class App:
             sleep(1/self.slider.get())
 
     def run(self):
-        thread = Thread(target=self._run)
-        thread.start()
+        if not self.isRunning:
+            thread = Thread(target=self._run)
+            thread.start()
 
     def stop(self):
         self.isRunning = False
