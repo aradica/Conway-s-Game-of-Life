@@ -157,8 +157,8 @@ class App:
             row += 1
 
     def centerWindow(self):
-        width = 341
-        height = 550
+        width = 500
+        height = 600
 
         x = (self.root.winfo_screenwidth() // 2) - (width // 2)
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
